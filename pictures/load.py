@@ -47,13 +47,14 @@ class ImageProcess:
         tmp_file = io.BytesIO(self.__original_image.read())
         image = Image.open(tmp_file).resize((self.__width, self.__height), Image.ANTIALIAS)
         new_image = io.BytesIO()
-        image.save(new_image, 'PNG')
+        image.save(new_image, self.__extension)
         return new_image
 
     def get_image(self):
         """
         Возвращает измененное изображение
         """
+        #
         return self.__resize_image()
 
     def change_load_image(self):

@@ -50,7 +50,6 @@ class ImagesAdminView(admin.ModelAdmin):
 
         if change:
             if obj.picture:
-                # если пользователь сразу указывает url и картинку, дополнительно ничего сохранять не надо
                 if obj.height or obj.width:
 
                     file_name, file_extension = obj.get_file_name_and_extention()
@@ -66,7 +65,7 @@ class ImagesAdminView(admin.ModelAdmin):
                         # передадим кастомный атрибут, чтобы вывести корректное сообщение
                         setattr(self, 'sucsess', False)
                     return
-                setattr(self, 'sucsess', True)
+                setattr(self, 'sucsess', True)  # вот тут проверить вывод сообщения
 
         else:
             if obj.picture:
@@ -75,6 +74,8 @@ class ImagesAdminView(admin.ModelAdmin):
                 return super().save_model(request, obj, form, change)
             if obj.url:
                 # если пользователь указывает только url, то предварительно загружаем изображение по url
+                # либо можем проводить валидацию url, т.к. в save при отсутствии картинки и наличии url,
+                # картинка будет загружена
                 result = download_image_from_url(obj=obj, url=obj.url)
                 if result:
                     setattr(self, 'sucsess', True)
